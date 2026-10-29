@@ -13,32 +13,9 @@ The Supabase anon key is public by design. Row Level Security policies in the sc
 
 ## Install and develop
 
-### Install the required tools on Windows
+### Build prerequisites
 
-Open **Command Prompt** (CMD). The following commands use Windows Package Manager (`winget`):
-
-```cmd
-winget --version
-winget install --id OpenJS.NodeJS.LTS -e --source winget
-winget install --id Git.Git -e --source winget
-winget install --id Google.AndroidStudio -e --source winget
-```
-
-Close and reopen Command Prompt after installation, then check:
-
-```cmd
-node --version
-npm --version
-git --version
-```
-
-Install Android Studio from its [official download page](https://developer.android.com/studio) if `winget` is unavailable. Launch Android Studio and complete its setup wizard; install the Android SDK Platform, Android SDK Build-Tools, and Android SDK Command-line Tools in **More Actions → SDK Manager**. Open **SDK Manager → SDK Tools** to see the installed SDK location. For this project, set `sdk.dir` to that location in `android\local.properties`. A JDK is also required; Android Studio includes a bundled JDK, or install a compatible JDK and configure `JAVA_HOME`.
-
-Download and install the Antigravity desktop app from Google's [official Antigravity download page](https://antigravity.google/download?os=windows). It is an installer download rather than a `winget` command. The Antigravity CLI is optional; if you want it in CMD, the official Windows command is:
-
-```cmd
-curl -fsSL https://antigravity.google/cli/install.cmd -o install.cmd && install.cmd && del install.cmd
-```
+Install Node.js (LTS), Git, and—for Android builds—Android Studio with the Android SDK Platform and Build-Tools. Android builds also need JDK 17. Configure the SDK path in `android/local.properties` as `sdk.dir=C:\\Users\\<you>\\AppData\\Local\\Android\\Sdk` (adjust it to your SDK location). No separate Antigravity app or CLI is needed.
 
 ### Install this project's JavaScript packages
 
@@ -91,11 +68,7 @@ For Android, install Android Studio/Android SDK and configure `android/local.pro
 
 ## Download the built apps
 
-These links download the build artifacts currently in this project:
-
-- [Download Android debug APK](android/app/build/outputs/apk/debug/app-debug.apk)
-- [Download Windows installer](release/Galaxy%20AI%20Setup%201.0.0.exe)
-- [Download Windows portable EXE](release/Galaxy%20AI%201.0.0.exe)
+Published Windows and Android downloads are attached to the latest GitHub Release: [Galaxy AI releases](https://github.com/Yashu2004-25/galaxyAI/releases/latest). Build outputs are local files until uploaded to a release.
 
 ## Features
 
