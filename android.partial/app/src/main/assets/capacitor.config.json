@@ -1,0 +1,10 @@
+{
+	"appId": "com.galaxyai.app",
+	"appName": "Galaxy AI",
+	"webDir": "dist",
+	"plugins": {
+		"CapacitorHttp": {
+			"enabled": true
+		}
+	}
+}

@@ -1,0 +1,24 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root { font-family: Inter, sans-serif; color: #0a1a2f; background: #fff; font-synthesis: none; text-rendering: optimizeLegibility; }
+* { box-sizing: border-box; }
+html, body, #root { margin: 0; min-height: 100%; width: 100%; }
+body { min-width: 340px; background: #fff; }
+button, input, textarea, select { font: inherit; }
+button { cursor: pointer; }
+::selection { background: #e8eefb; }
+.safe-bottom { padding-bottom: max(1rem, env(safe-area-inset-bottom)); }
+.scrollbar-thin::-webkit-scrollbar { width: 6px; }
+.scrollbar-thin::-webkit-scrollbar-thumb { background: #dce3f0; border-radius: 99px; }
+pre { overflow-x: auto; border-radius: 12px; padding: 1rem; background: #0a1a2f; color: #e8eefb; }
+code { font-family: ui-monospace, SFMono-Regular, Consolas, monospace; }
+.markdown p { margin: .6rem 0; line-height: 1.7; }
+.markdown ul, .markdown ol { margin: .5rem 0; padding-left: 1.4rem; }
+.markdown table { border-collapse: collapse; width: 100%; margin: .75rem 0; }
+.markdown th, .markdown td { border: 1px solid #dce3f0; padding: .5rem; text-align: left; }
+.markdown a { color: #1e4fd8; text-decoration: underline; }
+@media (min-width: 840px) { .mobile-tabs { display: none !important; } }
+@media (min-width: 840px) { .mobile-menu { display: none !important; } }
+@media (max-width: 839px) { .desktop-nav { display: none !important; } .page-content { padding-bottom: 96px !important; } }
