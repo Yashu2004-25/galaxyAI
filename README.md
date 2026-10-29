@@ -1,82 +1,147 @@
 # Galaxy AI
 
-Galaxy AI is a JavaScript learning companion built with React, Vite, Tailwind, Supabase, Groq, Electron, and Capacitor. It can be packaged as a Windows installer/portable executable and an Android APK from the same source.
+<p align="center">
+  <img src="docs/hero.svg" alt="Galaxy AI — your AI-powered JavaScript learning companion" width="100%">
+</p>
 
-## Configure Supabase
+<p align="center">
+  A focused learning companion for JavaScript study, AI chat, and guided roadmaps.<br>
+  Built with React, Vite, Supabase, Groq, Electron, and Capacitor.
+</p>
 
-1. Copy `.env.example` to `.env` in this project folder.
-2. Set `VITE_SUPABASE_URL` and `VITE_SUPABASE_ANON_KEY` to your Supabase project URL and public anon key. Never use a `service_role` key in the app.
-3. Run the SQL in [`sql/schema.sql`](sql/schema.sql) in the Supabase SQL Editor. Email/password authentication must be enabled.
-4. Restart Vite or rebuild after changing `.env`; Vite embeds these public values at build time.
-
-The Supabase anon key is public by design. Row Level Security policies in the schema limit each user to their own rows.
-
-## Install and develop
-
-### Build prerequisites
-
-Install Node.js (LTS), Git, and—for Android builds—Android Studio with the Android SDK Platform and Build-Tools. Android builds also need JDK 17. Configure the SDK path in `android/local.properties` as `sdk.dir=C:\\Users\\<you>\\AppData\\Local\\Android\\Sdk` (adjust it to your SDK location). No separate Antigravity app or CLI is needed.
-
-### Install this project's JavaScript packages
-
-Open Command Prompt in the project folder (the folder containing `package.json`):
-
-```cmd
-cd /d C:\path\to\galaxyAI
-npm install
-```
-
-`npm install` downloads the packages listed in `package.json`. The main runtime packages are React/React DOM, Vite, Tailwind CSS, React Router, Zustand, Supabase JS, Capacitor Android/App/Browser, secure storage, React Markdown/GFM/highlighting, Lucide icons, and locally bundled Inter fonts. The build tools include Electron, electron-builder, Capacitor CLI, Vitest, Sharp, and PNG-to-ICO.
-
-Install the project packages again after pulling a fresh copy or when `package.json` changes. You do not need to install each JavaScript library globally.
-
-### Start the project
-
-```powershell
-npm run dev            # browser preview at http://localhost:5173
-npm run electron:dev   # Windows desktop development
-```
-
-In browser development, API secrets use localStorage and are **not encrypted**. Electron uses OS safeStorage; Android uses the secure-storage plugin. Configure a Groq key under Settings before using chat or roadmaps. The YouTube key is optional.
-
-## Build
-
-Run these commands from the project root in PowerShell:
-
-```powershell
-npm install
-npm run electron:build # Windows installer and portable .exe
-npm run android:debug  # Android debug .apk
-```
-
-The outputs are written to `release\Galaxy AI Setup 1.0.0.exe`, `release\Galaxy AI 1.0.0.exe`, and `android\app\build\outputs\apk\debug\app-debug.apk`.
-
-### Build an updated app after editing code
-
-Save your changes, then rerun the build command for the platform you want:
-
-```powershell
-npm run electron:build # rebuilds both Windows .exe files
-npm run android:debug  # rebuilds the Android debug .apk
-```
-
-Both commands rebuild the web app automatically; `android:debug` also syncs the updated web files into the Android project. If you only want to preview edits during development, use `npm run dev` or `npm run electron:dev` instead. If you change `.env`, rebuild the target app too, since the Supabase values are embedded during the build.
-
-To generate the app icons again after changing the artwork, run `npm run icons` before building.
-
-For Android, install Android Studio/Android SDK and configure `android/local.properties` with `sdk.dir`. Use JDK 17 or a compatible installed JDK. To build a release APK, run `npm run android:release`; it must be signed with your own keystore. Never commit keystore files or passwords.
-
-## Download the built apps
-
-Published Windows and Android downloads are attached to the latest GitHub Release: [Galaxy AI releases](https://github.com/Yashu2004-25/galaxyAI/releases/latest). Build outputs are local files until uploaded to a release.
+<p align="center">
+  <a href="https://github.com/Yashu2004-25/galaxyAI/releases/latest">Latest downloads</a> ·
+  <a href="#quick-start">Quick start</a> ·
+  <a href="#build-for-windows-and-android">Build apps</a>
+</p>
 
 ## Features
 
-- Supabase email/password sign-in, sign-up, password recovery, session persistence, user-scoped RLS data.
-- AI chat with Groq streaming, stop/regenerate/copy, history, model picker, favourites/custom models, compare replies, web-search routing, six study modes, Markdown and code highlighting.
-- Two-stage study roadmap research and structured generation, YouTube link verification, progress tracking, saved roadmaps, and Tutor-mode step handoff.
-- Encrypted device secret storage for Groq and optional YouTube keys, responsive white/obsidian interface, locally bundled Inter font, knight icon.
+- AI chat with Groq streaming, model selection, study modes, Markdown, and code highlighting.
+- Guided study roadmaps with research, verified YouTube links, progress tracking, and saved plans.
+- Supabase email/password authentication and user-scoped data protected with Row Level Security.
+- Secure on-device storage for provider keys in Electron and Android.
+- One shared React application packaged as a Windows installer, portable Windows app, and Android APK.
 
-## Verification
+## Quick start
 
-Run `npm test` for unit coverage of JSON parsing, YouTube ID extraction, SSE parsing, model filtering, and history trimming.
+### Prerequisites
+
+- Node.js LTS and npm.
+- Git.
+- For Android builds: Android Studio, Android SDK Platform 35, Android SDK Build-Tools, and JDK 17 or newer.
+- Windows is required to build the Windows installer and portable `.exe` with the included scripts.
+
+### 1. Get the source and install packages
+
+Run from PowerShell:
+
+```powershell
+git clone https://github.com/Yashu2004-25/galaxyAI.git
+cd galaxyAI
+npm ci
+```
+
+If you already have the repository, open PowerShell in its root folder and run `npm ci` after a fresh checkout or `package.json` changes.
+
+### 2. Configure the app
+
+Create the local environment file and set the Supabase values:
+
+```powershell
+Copy-Item .env.example .env
+notepad .env
+```
+
+Set `VITE_SUPABASE_URL` and `VITE_SUPABASE_ANON_KEY` in `.env`. Use only the public anon key; never put a Supabase `service_role` key in a client app. Run [`sql/schema.sql`](sql/schema.sql) in the Supabase SQL Editor and enable email/password authentication.
+
+The Supabase URL and anon key are embedded when Vite builds the app. Rebuild after changing `.env`. Configure a Groq key from the app's Settings screen before using chat or roadmaps; a YouTube API key is optional.
+
+For Android, point Gradle at the installed SDK if `android/local.properties` does not already exist:
+
+```powershell
+'sdk.dir=' + ($env:LOCALAPPDATA + '/Android/Sdk') | Set-Content -Encoding ASCII android/local.properties
+```
+
+Change the SDK path if Android Studio installed it somewhere else. `android/local.properties` is machine-specific and is not committed.
+
+### 3. Run in development
+
+```powershell
+npm run dev           # Web app at http://localhost:5173
+npm run electron:dev  # Windows desktop app
+```
+
+Browser development stores provider keys in localStorage, which is not encrypted. Use the desktop or Android app for secure OS-backed key storage.
+
+## Build for Windows and Android
+
+Run commands from the repository root. Each platform command builds the web app automatically; the Android command also syncs the web assets and Capacitor plugins.
+
+```powershell
+npm run electron:build # Windows installer and portable .exe
+npm run android:debug  # Installable Android debug APK
+```
+
+### Build outputs
+
+| App | File path |
+| --- | --- |
+| Windows installer | `release\Galaxy AI Setup 1.0.0.exe` |
+| Windows portable app | `release\Galaxy AI 1.0.0.exe` |
+| Android debug APK | `android\app\build\outputs\apk\debug\app-debug.apk` |
+
+The `release/` directory and Android build directory are ignored by Git. The files are created on your computer after building. Published downloads are attached to the [latest GitHub Release](https://github.com/Yashu2004-25/galaxyAI/releases/latest).
+
+### Rebuild after editing code
+
+Save your changes, then run the build command for each app you want to update:
+
+```powershell
+npm run electron:build # Rebuilds both Windows .exe files
+npm run android:debug  # Rebuilds the Android debug APK
+```
+
+If you edit only the web app and want a quick local preview, use `npm run dev` or `npm run electron:dev`. If you change `.env`, rebuild the app too so the new Supabase configuration is included.
+
+### Optional Android release APK
+
+```powershell
+npm run android:release
+```
+
+Configure release signing with your own keystore before distributing a release APK. Keep keystores and passwords out of Git. The debug APK is suitable for local installation and testing; use a signed release APK for distribution.
+
+### Icons and tests
+
+```powershell
+npm run icons # Regenerate desktop and Android icons from the artwork
+npm test      # Run the unit tests
+```
+
+## Project structure
+
+```text
+galaxyAI/
+├── android/                 # Native Android project and Capacitor configuration
+│   └── app/                 # Android application, resources, and APK build output
+├── docs/                    # README artwork and project documentation assets
+├── electron/                # Electron main process and secure preload bridge
+├── public/                  # Web-served assets and source icon artwork
+├── scripts/                 # Icon generation and Android icon sync scripts
+├── sql/                     # Supabase database schema and Row Level Security policies
+├── src/
+│   ├── lib/                 # Supabase client and secure storage helpers
+│   ├── services/            # AI, roadmap, and Supabase data services
+│   ├── store/               # Chat, settings, auth, and roadmap state
+│   └── styles.css           # Application styles
+├── tests/                   # Unit tests
+├── .env.example             # Environment variable template (copy to .env)
+├── capacitor.config.json    # Capacitor app configuration
+├── package.json             # Dependencies, build scripts, and packaging settings
+└── vite.config.js           # Vite web build configuration
+```
+
+## Download the apps
+
+When a release is published, download the Windows installer, portable `.exe`, or Android APK from [GitHub Releases](https://github.com/Yashu2004-25/galaxyAI/releases/latest). To create the files locally, use the build commands above.
