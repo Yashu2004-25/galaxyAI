@@ -8,3 +8,7 @@ android/local.properties
 *.jks
 *.keystore
 .DS_Store
+
+!apps/
+!apps/*.exe
+!apps/*.apk
