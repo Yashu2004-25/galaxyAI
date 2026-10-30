@@ -1,8 +1,8 @@
 import { secureStore } from '../../lib/secureStore.js';
 
 const BASE = 'https://api.groq.com/openai/v1';
-export const FALLBACK_MODELS = ['llama-3.3-70b-versatile', 'llama-3.1-8b-instant', 'groq/compound'];
-const excluded = ['whisper', 'tts', 'playai', 'orpheus', 'guard', 'prompt-guard'];
+export const FALLBACK_MODELS = ['llama-3.1-8b-instant'];
+const excluded = ['whisper', 'tts', 'playai', 'orpheus', 'guard', 'prompt-guard', 'compound'];
 
 /** Convert an HTTP/API error into a useful message without exposing credentials. */
 export function apiError(status, message = '') {
@@ -34,7 +34,7 @@ async function request(path, options = {}) {
 export const groqProvider = {
   async listModels() {
     const response = await request('/models'); const data = await response.json();
-    const models = filterChatModels(data.data);
+    const models = filterChatModels(data.data).filter((model) => model.id !== 'groq/compound');
     localStorage.setItem('galaxy-model-cache', JSON.stringify(models));
     return models;
   },
@@ -56,3 +56,41 @@ export const groqProvider = {
   },
   async complete(body) { const response = await request('/chat/completions', { method: 'POST', body: JSON.stringify({ ...body, stream: false }) }); return response.json(); }
 };
+
+const CURRENT_QUESTION = /\b(today|currently|current|latest|recent|right now|this week|this month|this year|time|date|weather|news|price|stock|score|president|prime minister|ceo|richest|billionaire|election|schedule|who is .* (now|today)|what happened)\b/i;
+
+/** Search DuckDuckGo for useful current context before answering time-sensitive questions. */
+export async function searchCurrentContext(question) {
+  if (!CURRENT_QUESTION.test(question)) return [];
+  try {
+    const url = `https://api.duckduckgo.com/?q=${encodeURIComponent(question)}&format=json&no_html=1&skip_disambig=1`;
+    let response;
+    if (window.galaxy?.httpGet) {
+      const native = await window.galaxy.httpGet(url, { Accept: 'application/json' });
+      if (native.status < 200 || native.status >= 300) return [];
+      return parseDuckDuckGo(JSON.parse(native.body));
+    }
+    if (window.Capacitor?.isNativePlatform?.()) {
+      const { CapacitorHttp } = await import('@capacitor/core');
+      const native = await CapacitorHttp.get({ url, headers: { Accept: 'application/json' }, connectTimeout: 15000, readTimeout: 15000 });
+      if (native.status < 200 || native.status >= 300) return [];
+      return parseDuckDuckGo(native.data);
+    }
+    response = await fetch(url, { headers: { Accept: 'application/json' } });
+    if (!response.ok) return [];
+    const data = await response.json();
+    return parseDuckDuckGo(data);
+  } catch {
+    return [];
+  }
+}
+
+function parseDuckDuckGo(data) {
+    const results = [];
+    if (data.AbstractText) results.push({ title: data.Heading || 'DuckDuckGo result', text: data.AbstractText, url: data.AbstractURL });
+    for (const item of data.RelatedTopics ?? []) {
+      if (item.Text) results.push({ title: item.Text, text: item.Text, url: item.FirstURL });
+      for (const child of item.Topics ?? []) if (child.Text) results.push({ title: child.Text, text: child.Text, url: child.FirstURL });
+    }
+    return results.slice(0, 6);
+}

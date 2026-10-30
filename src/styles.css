@@ -2,17 +2,25 @@
 @tailwind components;
 @tailwind utilities;
 
-:root { font-family: Inter, sans-serif; color: #0a1a2f; background: #fff; font-synthesis: none; text-rendering: optimizeLegibility; }
+:root { font-family: Inter, sans-serif; color: #202123; background: #fff; font-synthesis: none; text-rendering: optimizeLegibility; }
 * { box-sizing: border-box; }
 html, body, #root { margin: 0; min-height: 100%; width: 100%; }
 body { min-width: 340px; background: #fff; }
+.black-hole-mark { position: relative; display: inline-block; width: 1.35rem; height: 1.35rem; border-radius: 50%; background: radial-gradient(ellipse at center, #0a1020 0 24%, transparent 26%), conic-gradient(from 20deg, #8ad9ff, #3156e8 22%, #e7a6ff 36%, #0a1020 48%, #54d9ff 68%, #7850ea 84%, #8ad9ff); transform: rotate(-18deg) scaleY(.68); box-shadow: 0 0 10px #48bfff99; }
+.black-hole-mark::before { content: ""; position: absolute; inset: 36% -16%; border: 2px solid #a8dfff; border-left-color: #ddafff; border-right-color: #6b82ff; border-radius: 50%; transform: rotate(-16deg); }
+.black-hole-mark i { position: absolute; left: 39%; top: 38%; width: 22%; height: 24%; border-radius: 50%; background: #080d19; box-shadow: 0 0 4px 2px #101529; }
+.black-hole-mark.large { width: 2rem; height: 2rem; }
+.app-header { height: 3.5rem; border-bottom: 1px solid #e5e5e5; }
+.message-user { border-radius: 1.4rem; background: #f4f4f4; color: #202123; padding: .8rem 1rem; }
+.message-assistant { color: #202123; padding: .8rem .2rem; }
+
 button, input, textarea, select { font: inherit; }
 button { cursor: pointer; }
 ::selection { background: #e8eefb; }
 .safe-bottom { padding-bottom: max(1rem, env(safe-area-inset-bottom)); }
 .scrollbar-thin::-webkit-scrollbar { width: 6px; }
 .scrollbar-thin::-webkit-scrollbar-thumb { background: #dce3f0; border-radius: 99px; }
-pre { overflow-x: auto; border-radius: 12px; padding: 1rem; background: #0a1a2f; color: #e8eefb; }
+pre { overflow-x: auto; border-radius: 12px; padding: 1rem; background: #202123; color: #f7f7f8; }
 code { font-family: ui-monospace, SFMono-Regular, Consolas, monospace; }
 .markdown p { margin: .6rem 0; line-height: 1.7; }
 .markdown ul, .markdown ol { margin: .5rem 0; padding-left: 1.4rem; }
